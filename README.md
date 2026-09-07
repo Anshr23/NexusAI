@@ -145,6 +145,6 @@ The application will start at `http://localhost:5173`.
 
 ---
 
-## License & Author
+## License
 
-ISC License. Built with ❤️ by [Ansh Rai](https://www.linkedin.com/in/anshr23/).
+Distributed under the ISC License.
