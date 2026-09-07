@@ -1,29 +1,37 @@
-import { NextFunction , Request, Response } from "express";
-import jwt, { Secret, SignOptions } from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
+import jwt, { SignOptions } from "jsonwebtoken";
 
-export const createToken = (id: string, email: string, expiresIn: string | number) => {
-    const payload = { id, email };
-    const secret: Secret = process.env.JWT_SECRET as Secret;
-    const options = { expiresIn: expiresIn as SignOptions['expiresIn'] };
-    const token = jwt.sign(payload, secret, options);
-    return token;
+const COOKIE_NAME = process.env.COOKIE_NAME;
+const JWT_SECRET = process.env.JWT_SECRET || "";
+
+export const createToken = (id: string, email: string, expiresIn: string) => {
+  const payload = { id, email };
+  const token = jwt.sign(payload, JWT_SECRET, {
+    expiresIn: expiresIn as SignOptions["expiresIn"],
+  });
+  return token;
 };
 
-export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.signedCookies[`${process.env.COOKIE_NAME}`];
-    if (!token || typeof token !== "string" || token.trim() === "") {
-        res.status(401).json({ message: "Token Not Received" });
-        return;
-    }
-
-    jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
-        if (err) {
-            res.status(401).json({ message: "Token Expired" });
-            return;
-        }
-
-        res.locals.jwtData = decoded;
+export const verifyToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const token = req.signedCookies[`${COOKIE_NAME}`];
+  if (!token || token.trim() === "") {
+    res.status(401).json({ message: "Token Not Received" });
+    return;
+  }
+  return new Promise<void>((resolve) => {
+    jwt.verify(token, JWT_SECRET, (err, success) => {
+      if (err) {
+        res.status(401).json({ message: "Token Expired" });
+        return resolve();
+      } else {
+        res.locals.jwtData = success;
         next();
+        return resolve();
+      }
     });
+  });
 };
-

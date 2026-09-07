@@ -6,23 +6,7 @@ import cookieParser from 'cookie-parser';
 import cors from "cors";
 const app = express();
 
-const isDev = process.env.NODE_ENV === "development";
-
-const allowedOrigins = isDev
-  ? [(process.env.IN_LOCALHOST || "http://localhost:5173").trim()]
-  : [(process.env.FRONTEND_URL || "").trim()];
-
-app.use(cors({
-    origin: (origin, callback) => {
-        // Allow non-browser requests (no Origin header) and known UI origins.
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-            return;
-        }
-        callback(new Error(`CORS blocked for origin: ${origin}`));
-    },
-    credentials: true,
-}));
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
 //middleware to parse JSON and URL-encoded data
 app.use(express.json());
@@ -30,7 +14,11 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
-app.use(morgan('dev')); // HTTP request logger middleware
+// app.use(morgan('dev')); // HTTP request logger middleware
+
+// app.get("/", (req, res) => {
+//   res.send("API is running");
+// });
 
 app.use("/api/v1", appRouter); // Use the appRouter for all routes under /api/v1
 

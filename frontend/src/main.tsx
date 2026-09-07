@@ -1,36 +1,33 @@
-import { createRoot } from 'react-dom/client';
-import './index.css';
-import App from './App.tsx';
-import { createTheme, ThemeProvider } from '@mui/material';
-import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext.tsx';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
+import { createTheme, ThemeProvider } from "@mui/material";
+import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext.tsx";
+import { Toaster } from "react-hot-toast";
+import axios from "axios";
 
-import axios from 'axios';
-const isDev = import.meta.env.VITE_NODE_ENV === "development";
 
-const apiBaseUrl = isDev
-  ? (import.meta.env.VITE_IN_LOCALHOST || "http://localhost:5001") + "/api/v1"
-  : (import.meta.env.VITE_BACKEND_URL || "") + "/api/v1";
-
-axios.defaults.baseURL = apiBaseUrl;
+axios.defaults.baseURL = (import.meta.env.VITE_IN_LOCALHOST || "http://localhost:5001") + "/api/v1";
 axios.defaults.withCredentials = true;
 
-import { Toaster } from 'react-hot-toast';
-
-const theme = createTheme({ 
+const theme = createTheme({
   typography: {
-  fontFamily: "Roboto Slab, serif",
-  allVariants: { color: "white" },
-},
+    fontFamily: "Roboto Slab,serif",
+    allVariants: { color: "white" },
+  },
 });
 
-createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
     <AuthProvider>
-    <BrowserRouter>
-    <ThemeProvider theme={theme}>
-      <Toaster position="top-right" />
-      <App />
-    </ThemeProvider>
-    </BrowserRouter>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <Toaster position="top-right" />
+          <App />
+        </ThemeProvider>
+      </BrowserRouter>
     </AuthProvider>
-)
+  </React.StrictMode>
+);

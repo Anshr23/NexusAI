@@ -3,6 +3,18 @@ import { connectToDatabase } from "./db/connection.js";
 
 const PORT = process.env.PORT || 5001;
 
+//connections and listeners
+connectToDatabase()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT} and connected to the database.`);
+    });
+  })
+  .catch((error) => {
+    console.error("Failed to connect to the database:", error);
+  }
+  );  
+
 
 // app.post("/first", (req, res, next) => {
 //   //getting info from static route 
@@ -22,16 +34,3 @@ const PORT = process.env.PORT || 5001;
 //   console.log(`Server is running on http://localhost:${PORT}`);
 // }
 // );
-
-//connections and listeners
-connectToDatabase()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server is running on http://localhost:${PORT} and connected to the database.`);
-    });
-  })
-  .catch((error) => {
-    console.error("Failed to connect to the database:", error);
-  }
-  );  
-

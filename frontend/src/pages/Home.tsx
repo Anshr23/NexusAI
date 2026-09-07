@@ -1,6 +1,4 @@
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { useMediaQuery, useTheme } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import TypingAnim from "../components/shared/TypingAnim";
 import Footer from "../components/shared/Footer";
 
@@ -9,26 +7,36 @@ const Home = () => {
   const isBelowMd = useMediaQuery(theme.breakpoints.down("md"));
   return (
     <Box width={"100%"} height={"100%"}>
-      < Typography sx={{ mx: "auto", fontFamily: "work sans" , ml: 2}}>
-                Just A Clever Knowledge-bot
-        </Typography>
-      <Box 
-        sx={{ display: "flex", width: "100%", flexDirection: "column", alignItems: "center", mx: "auto", mt: 3, }}>
-      <Box>
-        
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          flexDirection: "column",
+          alignItems: "center",
+          mx: "auto",
+          mt: 3,
+        }}
+      >
+        <Box>
           <TypingAnim />
         </Box>
         <Box
-          sx={{ width: "100%", display: "flex", flexDirection: { md: "row", xs: "column", sm: "column" }, gap: 5, my: 10,
-          }}>
+          sx={{
+            width: "100%",
+            display: "flex",
+            flexDirection: { md: "row", xs: "column", sm: "column" },
+            gap: 5,
+            my: 10,
+          }}
+        >
           <img
-            src="jack2.png"
+            src="robot.png"
             alt="robot"
             style={{ width: "200px", margin: "auto" }}
           />
           <img
-            className="rotate" //image-inverted
-            src="logormbg.png"
+            className="image-inverted rotate"
+            src="openai.png"
             alt="openai"
             style={{ width: "200px", margin: "auto" }}
           />

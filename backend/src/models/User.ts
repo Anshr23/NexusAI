@@ -30,28 +30,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    chats: [chatSchema], // Array of chat objects
-    conversations: [
-        new mongoose.Schema({
-            id: {
-                type: String,
-                default: () => randomUUID(),
-            },
-            title: {
-                type: String,
-                required: true,
-            },
-            chats: [chatSchema],
-            createdAt: {
-                type: Date,
-                default: Date.now,
-            },
-            updatedAt: {
-                type: Date,
-                default: Date.now,
-            },
-        }, { _id: false })
-    ],
+    chats: [chatSchema],
 });
 
-export default mongoose.model('User', userSchema);
+export default mongoose.model("User", userSchema);
