@@ -19,7 +19,7 @@ const Footer = () => {
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-          <img src="/logo.png" alt="NexusAI" width="26px" height="26px" />
+          <img src="/logormbg.png" alt="NexusAI" width="26px" height="26px" />
           <Typography sx={{ fontWeight: "700", fontSize: "18px", color: "white" }}>
             Nexus<span style={{ color: "#00fffc" }}>AI</span>
           </Typography>

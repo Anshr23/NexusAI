@@ -7,7 +7,7 @@ const Logo = () => {
         display: "flex", marginRight: "auto", alignItems: "center", gap: "15px",
     }}>
         <Link to={"/"}>
-            <img src='logo.png' alt='NexusAI' width={'30px'} height={'30px'}  />
+            <img src='logormbg.png' alt='NexusAI' width={'30px'} height={'30px'}  />
         </Link>
         <Typography sx={{
                 display: { md: "block", sm: "none", xs: "none" },

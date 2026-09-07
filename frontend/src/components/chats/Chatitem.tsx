@@ -176,7 +176,7 @@ const ChatItem = ({
         }}
       >
         {isAssistant ? (
-          <img src="/logo.png" alt="NexusAI" width="22px" height="22px" />
+          <img src="/logormbg.png" alt="NexusAI" width="22px" height="22px" />
         ) : (
           auth?.user?.name?.[0] || "U"
         )}
