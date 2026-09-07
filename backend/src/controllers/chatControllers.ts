@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../models/User.js";
-import { configureOpenAI } from "../config/aiConfig.js";
+import { getAIProviders } from "../config/aiConfig.js";
 
 export const generateChatCompletion = async (
   req: Request,
@@ -24,21 +24,58 @@ export const generateChatCompletion = async (
     chats.push({ content: message, role: "user" });
     user.chats.push({ content: message, role: "user" });
 
-    // send all chats with new one to openAI API
-    const openai = configureOpenAI();
-    // get latest response
-    const chatResponse = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: chats,
-    });
-    if (chatResponse.choices[0]?.message) {
-      user.chats.push({
-        role: chatResponse.choices[0].message.role,
-        content: chatResponse.choices[0].message.content || "",
+    const providers = getAIProviders();
+    if (providers.length === 0) {
+      res.status(500).json({
+        message:
+          "No AI API keys configured. Please add GROQ_API_KEY, GEMINI_API_KEY, or OPEN_AI_SECRET in .env",
       });
+      return;
     }
+
+    let completionResponse: string | null = null;
+    let successfulProvider = "";
+
+    // Fallback across configured providers
+    for (const provider of providers) {
+      try {
+        console.log(`Attempting completion with ${provider.name}...`);
+        const chatResponse = await provider.client.chat.completions.create({
+          model: provider.model,
+          messages: chats,
+        });
+
+        let reply = chatResponse.choices[0]?.message?.content;
+        if (reply) {
+          // Strip thinking tags if returned by reasoning models
+          reply = reply.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
+          completionResponse = reply;
+          successfulProvider = provider.name;
+          console.log(`Success with ${provider.name}`);
+          break;
+        }
+      } catch (providerError: any) {
+        console.warn(
+          `Provider ${provider.name} failed:`,
+          providerError?.message || providerError
+        );
+      }
+    }
+
+    if (!completionResponse) {
+      res.status(500).json({
+        message:
+          "All configured AI providers failed. Please verify your API keys or rate limits.",
+      });
+      return;
+    }
+
+    user.chats.push({
+      role: "assistant",
+      content: completionResponse,
+    });
     await user.save();
-    res.status(200).json({ chats: user.chats });
+    res.status(200).json({ chats: user.chats, provider: successfulProvider });
     return;
   } catch (error: any) {
     console.log(error);

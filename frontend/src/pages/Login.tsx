@@ -32,7 +32,11 @@ const Login = () => {
   return (
     <Box width={"100%"} height={"100%"} display="flex" flex={1}>
       <Box padding={8} mt={8} display={{ md: "flex", sm: "none", xs: "none" }}>
-        <img src="airobot.png" alt="Robot" style={{ width: "400px" }} />
+        <img
+          src="/jack2.png"
+          alt="NexusAI Mascot"
+          style={{ width: "350px", filter: "drop-shadow(0 0 30px rgba(0, 255, 252, 0.3))" }}
+        />
       </Box>
       <Box
         display={"flex"}

@@ -1,149 +1,132 @@
-# J.A.C.K. (Just A Clever Knowledge-bot)
+# NexusAI — Intelligent Conversational AI Platform
 
-## Project Overview
+NexusAI is a full-stack, state-of-the-art conversational AI platform built with the MERN stack (MongoDB, Express, React, Node.js) and TypeScript. It features a resilient **Multi-LLM Fallback Architecture** that seamlessly routes chat completions across **Groq (Llama 3.3 70B)**, **Google Gemini (Gemini 1.5 Flash)**, and **OpenAI (GPT-3.5 / GPT-4)**.
 
-J.A.C.K. is an intelligent chatbot designed to provide information and assistance across various domains such as knowledge, business, advice, and education. This is a full-stack MERN (MongoDB, Express.js, React, Node.js) application that leverages advanced AI capabilities to offer a conversational experience.
+---
 
-**Live Demo:** https://ai-chatbot-t9j0.onrender.com/
+## Key Features
 
+- **Multi-LLM Fallback Engine**: Automatic failover across Groq, Google Gemini, and OpenAI to ensure 99.9% availability and avoid vendor rate limits.
+- **Persistent Chat History**: Fast MongoDB-backed conversation storage per user with full markdown and syntax-highlighted code rendering.
+- **Secure Authentication**: Cookie-based JWT sessions with signed HTTP-only cookies and bcrypt password hashing.
+- **Modern Responsive UI**: Crafted with React, Material-UI, and real-time state management.
+- **Syntax Highlighting**: Rich code-block formatting for developer conversations across dozens of programming languages.
 
-## Features
+---
 
-*   **Intelligent Chatbot:** Engage in conversations and get answers on a wide range of topics.
-*   **User Authentication:** Secure user registration, login, and logout functionalities.
-*   **Chat History:** Maintain and retrieve past conversations for a seamless user experience.
-*   **Responsive UI:** Designed to provide a user-friendly experience across different devices.
-*   **Clear Conversation:** Option to delete all past chat messages.
+## Multi-LLM Architecture
 
-![Demo GIF](https://raw.githubusercontent.com/Anshr23/J.A.C.K._AI-chatbot/main/frontend/public/demo.gif)
+```
+User Prompt ──► [Express API Layer] ──► [Token Auth & Validation]
+                                              │
+                                              ▼
+                             [Multi-Provider Fallback Chain]
+                                              │
+              ┌───────────────────────────────┼───────────────────────────────┐
+              ▼                               ▼                               ▼
+       [Primary: Groq]             [Secondary: Gemini]             [Tertiary: OpenAI]
+    (Llama 3.3 70B / 8B)            (Gemini 1.5 Flash)             (GPT-3.5 / GPT-4)
+```
 
-## Technologies Used
+---
+
+## Tech Stack
 
 ### Frontend
-*   React
-*   MUI (Material-UI) for UI components
-*   React Router DOM for navigation
-*   Axios for API requests
-*   React Hot Toast for notifications
+- **React 18** with **TypeScript** & **Vite**
+- **Material-UI (MUI)** & Custom CSS Design
+- **React Router v6**
+- **React Hot Toast** (notifications)
+- **React Syntax Highlighter** (code formatting)
+- **Axios** (with cookie credential support)
 
 ### Backend
-*   Node.js
-*   Express.js
-*   MongoDB (with Mongoose for ODM)
-*   bcrypt for password hashing
-*   jsonwebtoken for token-based authentication
-*   cookies-parser for handling HTTP cookies
+- **Node.js** & **Express 5** (TypeScript)
+- **MongoDB** with **Mongoose ODM**
+- **OpenAI SDK v4** (OpenAI-compatible multi-provider routing)
+- **JSON Web Tokens (JWT)** & **cookie-parser**
+- **express-validator** & **bcrypt**
 
-## Setup and Installation
+---
 
-Follow these steps to get J.A.C.K. up and running on your local machine.
+## Setup & Installation
 
 ### Prerequisites
+- Node.js (v18 or higher)
+- MongoDB Atlas cluster or local MongoDB instance
+- At least one API key from [Groq](https://console.groq.com), [Google AI Studio](https://aistudio.google.com), or [OpenAI](https://platform.openai.com)
 
-*   Node.js (LTS version recommended)
-*   npm or Yarn (package manager)
-*   MongoDB (local installation or MongoDB Atlas account)
+---
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/jackofall-trades/J.A.C.K._AI-chatbot.git
-cd J.A.C.K.
+git clone https://github.com/Anshr23/NexusAI.git
+cd NexusAI
 ```
 
-### 2. Backend Setup
+---
 
-Navigate to the `backend` directory:
+### 2. Backend Configuration & Startup
 
 ```bash
 cd backend
-```
-
-Install backend dependencies:
-
-```bash
 npm install
-# or
-yarn install
 ```
 
-Create a `.env` file in the `backend` directory and add the following environment variables:
+Create a `.env` file in the `backend/` directory:
 
-```
-MONGO_URI=<Your_MongoDB_Connection_String>
-JWT_SECRET=<A_Strong_Random_Secret_Key_for_JWT>
-COOKIE_NAME=auth_token
-OPEN_AI_SECRET=<Your_OpenAI_API_Key>
+```env
 PORT=5001
+NODE_ENV=development
+MONGODB_URL=your_mongodb_connection_string
+JWT_SECRET=your_super_secret_jwt_key
+COOKIE_NAME=auth_token
+COOKIE_SECRET=your_cookie_signature_secret
+
+# AI Providers (add one or all for automatic fallback)
+GROQ_API_KEY=your_groq_api_key
+GEMINI_API_KEY=your_google_gemini_api_key
+OPEN_AI_SECRET=your_openai_api_key
 ```
 
-Replace `<Your_MongoDB_Connection_String>`, `<A_Strong_Random_Secret_Key_for_JWT>`, and `<Your_OpenAI_API_Key>` with your actual values.
-
-Start the backend server:
-
-```bash
-npm start
-# or
-yarn start
-```
-
-The backend server will run on `http://localhost:5001`.
-
-### 3. Frontend Setup
-
-Open a new terminal, navigate back to the root directory of the project, and then into the `frontend` directory:
-
-```bash
-cd ..
-cd frontend
-```
-
-Install frontend dependencies:
-
-```bash
-npm install
-# or
-yarn install
-```
-
-Start the frontend development server:
+Run the backend server:
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
-The frontend application will typically open in your browser at `http://localhost:5173` (or another available port).
+---
 
-## Usage
+### 3. Frontend Configuration & Startup
 
-1.  **Register/Login:** Upon opening the application, you can register a new account or log in if you already have one.
-2.  **Chat with J.A.C.K.:** Once logged in, navigate to the chat interface to start conversing with the AI chatbot.
-3.  **Clear Conversations:** Use the "Clear Conversation" button to delete your chat history.
-4.  **Sign Out:** Log out of your account when you're done.
+In a new terminal:
 
-## Improvements (Version 1 - Future Enhancements)
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-This is the initial version of J.A.C.K., and there are many areas for future improvement.
+The application will start at `http://localhost:5173`.
 
-### UI/UX Enhancements
-*   **Enhanced Responsiveness:** Further optimize the UI for seamless adaptation across a wider range of screen sizes and devices.
-*   **Chat Message Styling:** Implement more visually appealing and distinct chat bubble designs for user and assistant messages.
-*   **Loading Indicators:** Add subtle loading indicators while waiting for AI responses to improve user feedback.
-*   **Error Handling Feedback:** Provide more informative and user-friendly error messages for network issues or API failures.
-*   **User Avatars:** Allow users to upload custom avatars or display more personalized default avatars.
+---
 
-### Functionality Enhancements
-*   **Advanced AI Model Options:** Integrate options to switch between different AI models (e.g., GPT-4, other specialized models) or allow users to fine-tune model parameters.
-*   **Document Upload/Analysis:** Enable users to upload documents (PDF, TXT, DOCX) for summarization, question-answering, or content analysis.
-*   **Voice Input/Output:** Add speech-to-text and text-to-speech capabilities for a hands-free conversational experience.
-*   **Sophisticated Chat History Management:** Implement features like searching through chat history, tagging conversations, or exporting chats.
-*   **Multi-turn Conversation Management:** Improve context retention and coherence over extended conversations.
+## API Endpoints
 
-### Backend/Performance Optimizations
-*   **API Caching:** Implement caching mechanisms for frequently requested data to reduce database load and improve response times.
-*   **Database Indexing:** Optimize MongoDB queries by adding appropriate indexes to frequently accessed fields.
-*   **Rate Limiting:** Implement rate limiting on API endpoints to prevent abuse and ensure fair usage.
-*   **Error Logging:** Set up robust error logging to monitor and diagnose issues in production.
+### User Routes (`/api/v1/user`)
+- `POST /signup` — Register a new user account
+- `POST /login` — Authenticate and issue signed session cookie
+- `GET /auth-status` — Verify active session
+- `GET /logout` — Invalidate session and clear auth cookie
 
+### Chat Routes (`/api/v1/chat`)
+- `POST /new` — Send message and receive AI completion (with multi-provider fallback)
+- `GET /all-chats` — Retrieve conversation history for current user
+- `DELETE /delete` — Clear all chat messages for current user
+
+---
+
+## License
+
+ISC License. Built by [Ansh Rai](https://www.linkedin.com/in/anshr23/).
