@@ -1,16 +1,33 @@
-# NexusAI — Intelligent Conversational AI Platform
+# NexusAI - Intelligent Conversational AI Platform
+
+<p align="center">
+  <img src="./frontend/public/logormbg.png" alt="NexusAI Logo" width="160" />
+</p>
 
 NexusAI is a full-stack, state-of-the-art conversational AI platform built with the MERN stack (MongoDB, Express, React, Node.js) and TypeScript. It features a resilient **Multi-LLM Fallback Architecture** that seamlessly routes chat completions across **Groq (Llama 3.3 70B)**, **Google Gemini (Gemini 1.5 Flash)**, and **OpenAI (GPT-3.5 / GPT-4)**.
+
+**Live Demo:** [NexusAI](https://nexusai-r5ww.onrender.com)
+
+---
+
+## Screenshots
+
+### User Experience
+![Landing Page](./frontend/public/home.png)
+
+### Chat Studio & Syntax Highlighting
+![Chat Studio](./frontend/public/chat.png)
 
 ---
 
 ## Key Features
 
-- **Multi-LLM Fallback Engine**: Automatic failover across Groq, Google Gemini, and OpenAI to ensure 99.9% availability and avoid vendor rate limits.
-- **Persistent Chat History**: Fast MongoDB-backed conversation storage per user with full markdown and syntax-highlighted code rendering.
+- **Multi-LLM Fallback Engine**: Automatic failover across Groq, Google Gemini, and OpenAI to ensure 99.9% uptime and prevent vendor rate-limiting disruptions.
+- **Persistent Chat History**: Fast MongoDB-backed conversation storage per user with full markdown and syntax-highlighted code blocks.
+- **One-Click Code Copy**: Developer-first syntax highlighter with instant copy-to-clipboard buttons and feedback.
 - **Secure Authentication**: Cookie-based JWT sessions with signed HTTP-only cookies and bcrypt password hashing.
-- **Modern Responsive UI**: Crafted with React, Material-UI, and real-time state management.
-- **Syntax Highlighting**: Rich code-block formatting for developer conversations across dozens of programming languages.
+- **Modern Responsive UI**: Premium cyberpunk-styled interface crafted with React, Material-UI, and smooth micro-animations.
+- **Smart Session Recovery**: Clean 200 OK guest state handling for seamless client-side authentication checks.
 
 ---
 
@@ -33,12 +50,12 @@ User Prompt ──► [Express API Layer] ──► [Token Auth & Validation]
 ## Tech Stack
 
 ### Frontend
-- **React 18** with **TypeScript** & **Vite**
-- **Material-UI (MUI)** & Custom CSS Design
-- **React Router v6**
-- **React Hot Toast** (notifications)
-- **React Syntax Highlighter** (code formatting)
-- **Axios** (with cookie credential support)
+- **React 19** with **TypeScript** & **Vite**
+- **Material-UI (MUI)** & Custom CSS Design System
+- **React Router v7**
+- **React Syntax Highlighter** (Prism theme with custom styling)
+- **React Hot Toast** (custom notifications)
+- **Axios** (configured for cross-origin credentials)
 
 ### Backend
 - **Node.js** & **Express 5** (TypeScript)
@@ -83,6 +100,7 @@ MONGODB_URL=your_mongodb_connection_string
 JWT_SECRET=your_super_secret_jwt_key
 COOKIE_NAME=auth_token
 COOKIE_SECRET=your_cookie_signature_secret
+FRONTEND_URL=http://localhost:5173
 
 # AI Providers (add one or all for automatic fallback)
 GROQ_API_KEY=your_groq_api_key
@@ -117,7 +135,7 @@ The application will start at `http://localhost:5173`.
 ### User Routes (`/api/v1/user`)
 - `POST /signup` — Register a new user account
 - `POST /login` — Authenticate and issue signed session cookie
-- `GET /auth-status` — Verify active session
+- `GET /auth-status` — Verify active session (returns 200 OK with `isAuthenticated`)
 - `GET /logout` — Invalidate session and clear auth cookie
 
 ### Chat Routes (`/api/v1/chat`)
@@ -127,6 +145,6 @@ The application will start at `http://localhost:5173`.
 
 ---
 
-## License
+## License & Author
 
-ISC License. Built by [Ansh Rai](https://www.linkedin.com/in/anshr23/).
+ISC License. Built with ❤️ by [Ansh Rai](https://www.linkedin.com/in/anshr23/).
