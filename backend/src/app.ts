@@ -6,7 +6,17 @@ import cookieParser from 'cookie-parser';
 import cors from "cors";
 const app = express();
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.FRONTEND_URL,
+].filter(Boolean) as string[];
+
+app.use(
+  cors({
+    origin: allowedOrigins.length > 0 ? allowedOrigins : true,
+    credentials: true,
+  })
+);
 
 //middleware to parse JSON and URL-encoded data
 app.use(express.json());
