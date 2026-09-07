@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../models/User.js";
 import { hash, compare } from "bcrypt";
+import jwt from "jsonwebtoken";
 import { createToken } from "../utils/tokenManager.js";
 
 const COOKIE_NAME = process.env.COOKIE_NAME || "auth_token";
@@ -114,23 +115,33 @@ export const verifyUser = async (
   next: NextFunction
 ) => {
   try {
-    //user token check
-    const user = await User.findById(res.locals.jwtData.id);
+    const token = req.signedCookies[`${COOKIE_NAME}`];
+    if (!token || token.trim() === "") {
+      res.status(200).json({ isAuthenticated: false, user: null });
+      return;
+    }
+
+    const decoded: any = jwt.verify(token, process.env.JWT_SECRET || "");
+    if (!decoded || !decoded.id) {
+      res.status(200).json({ isAuthenticated: false, user: null });
+      return;
+    }
+
+    const user = await User.findById(decoded.id);
     if (!user) {
-      res.status(401).send("User not registered OR Token malfunctioned");
+      res.status(200).json({ isAuthenticated: false, user: null });
       return;
     }
-    if (user._id.toString() !== res.locals.jwtData.id) {
-      res.status(401).send("Permissions didn't match");
-      return;
-    }
-    res
-      .status(200)
-      .json({ message: "OK", name: user.name, email: user.email });
+
+    res.status(200).json({
+      isAuthenticated: true,
+      message: "OK",
+      name: user.name,
+      email: user.email,
+    });
     return;
-  } catch (error: any) {
-    console.log(error);
-    res.status(500).json({ message: "ERROR", cause: error?.message });
+  } catch (error) {
+    res.status(200).json({ isAuthenticated: false, user: null });
     return;
   }
 };
