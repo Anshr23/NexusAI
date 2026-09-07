@@ -9,7 +9,14 @@ import { Toaster } from "react-hot-toast";
 import axios from "axios";
 
 
-axios.defaults.baseURL = (import.meta.env.VITE_IN_LOCALHOST || "http://localhost:5001") + "/api/v1";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL ||
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.MODE === "development" ? "http://localhost:5001" : "");
+
+axios.defaults.baseURL = backendUrl
+  ? `${backendUrl.replace(/\/$/, "")}/api/v1`
+  : "/api/v1";
 axios.defaults.withCredentials = true;
 
 const theme = createTheme({

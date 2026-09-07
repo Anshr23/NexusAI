@@ -6,9 +6,12 @@ import cookieParser from 'cookie-parser';
 import cors from "cors";
 const app = express();
 
+const frontendUrl = process.env.FRONTEND_URL?.replace(/\/$/, "");
+
 const allowedOrigins = [
   "http://localhost:5173",
-  process.env.FRONTEND_URL,
+  frontendUrl,
+  frontendUrl ? `${frontendUrl}/` : undefined,
 ].filter(Boolean) as string[];
 
 app.use(
