@@ -19,9 +19,32 @@ const Login = () => {
       toast.loading("Signing In", { id: "login" });
       await auth?.login(email, password);
       toast.success("Signed In Successfully", { id: "login" });
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      toast.error("Signing In Failed", { id: "login" });
+      const serverMsg =
+        error?.response?.data?.cause ||
+        error?.response?.data?.message ||
+        error?.response?.data ||
+        "";
+
+      if (
+        typeof serverMsg === "string" &&
+        (serverMsg.toLowerCase().includes("not registered") ||
+          serverMsg.toLowerCase().includes("not found"))
+      ) {
+        toast.error("User not found! Redirecting to Sign Up...", { id: "login" });
+        setTimeout(() => {
+          navigate("/signup");
+        }, 1500);
+      } else if (
+        typeof serverMsg === "string" &&
+        (serverMsg.toLowerCase().includes("password") ||
+          error?.response?.status === 403)
+      ) {
+        toast.error("Incorrect Password! Please try again.", { id: "login" });
+      } else {
+        toast.error("Signing In Failed", { id: "login" });
+      }
     }
   };
   useEffect(() => {
