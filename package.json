@@ -1,7 +1,13 @@
 {
-  "name": "nexus-ai-root",
+  "name": "nexus-ai-monolith",
+  "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": "20.x"
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "install-all": "npm install --prefix backend && npm install --prefix frontend",
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend && npm run build --prefix backend",
+    "start": "node backend/dist/index.js"
   }
 }

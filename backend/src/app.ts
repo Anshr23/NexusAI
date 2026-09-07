@@ -1,9 +1,11 @@
 import 'dotenv/config';
 import express from 'express';
-import morgan from "morgan"
+import morgan from "morgan";
 import appRouter from './routes/index.js'; // Import the appRouter from routes/index.js
 import cookieParser from 'cookie-parser';
 import cors from "cors";
+import path from "path";
+
 const app = express();
 
 const allowedOrigins = [
@@ -24,12 +26,18 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
-// app.use(morgan('dev')); // HTTP request logger middleware
-
-// app.get("/", (req, res) => {
-//   res.send("API is running");
-// });
-
 app.use("/api/v1", appRouter); // Use the appRouter for all routes under /api/v1
+
+// Serve frontend static assets from frontend/dist
+const frontendDistPath = path.resolve(process.cwd(), "frontend/dist");
+app.use(express.static(frontendDistPath));
+
+// Fallback all non-API routes to frontend index.html for React Router
+app.get("*", (req, res, next) => {
+  if (req.originalUrl.startsWith("/api")) {
+    return next();
+  }
+  res.sendFile(path.join(frontendDistPath, "index.html"));
+});
 
 export default app; 
