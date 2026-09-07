@@ -20,9 +20,27 @@ const Signup = () => {
       toast.loading("Signing Up", { id: "signup" });
       await auth?.signup(name, email, password);
       toast.success("Signed Up Successfully", { id: "signup" });
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      toast.error("Signing Up Failed", { id: "signup" });
+      const serverMsg =
+        error?.response?.data?.cause ||
+        error?.response?.data?.message ||
+        error?.response?.data ||
+        "";
+
+      if (
+        typeof serverMsg === "string" &&
+        serverMsg.toLowerCase().includes("already registered")
+      ) {
+        toast.error("Email already registered! Redirecting to Login...", {
+          id: "signup",
+        });
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+      } else {
+        toast.error("Signing Up Failed", { id: "signup" });
+      }
     }
   };
   useEffect(() => {

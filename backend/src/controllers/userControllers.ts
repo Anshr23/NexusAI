@@ -44,7 +44,7 @@ export const userSignup = async (
     const { name, email, password } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      res.status(401).send("User already registered");
+      res.status(401).json({ message: "ERROR", cause: "User already registered" });
       return;
     }
     const hashedPassword = await hash(password, 10);
@@ -80,12 +80,12 @@ export const userLogin = async (
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      res.status(401).send("User not registered");
+      res.status(401).json({ message: "ERROR", cause: "User not registered" });
       return;
     }
     const isPasswordCorrect = await compare(password, user.password);
     if (!isPasswordCorrect) {
-      res.status(403).send("Incorrect Password");
+      res.status(403).json({ message: "ERROR", cause: "Incorrect password" });
       return;
     }
 
