@@ -32,9 +32,9 @@ app.use("/api/v1", appRouter); // Use the appRouter for all routes under /api/v1
 const frontendDistPath = path.resolve(process.cwd(), "frontend/dist");
 app.use(express.static(frontendDistPath));
 
-// Fallback all non-API routes to frontend index.html for React Router
-app.get("*", (req, res, next) => {
-  if (req.originalUrl.startsWith("/api")) {
+// Fallback all non-API GET requests to frontend index.html for React Router SPA
+app.use((req, res, next) => {
+  if (req.method !== "GET" || req.originalUrl.startsWith("/api")) {
     return next();
   }
   res.sendFile(path.join(frontendDistPath, "index.html"));
