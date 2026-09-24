@@ -10,7 +10,14 @@ type Props = {
 const NavLink = (props: Props) => {
   return (
     <Link
-      onClick={props.onClick}
+      onClick={(e) => {
+        if (props.to === "#") {
+          e.preventDefault();
+        }
+        if (props.onClick) {
+          props.onClick();
+        }
+      }}
       className="nav-link"
       to={props.to}
       style={{

@@ -9,10 +9,9 @@ import { Toaster } from "react-hot-toast";
 import axios from "axios";
 
 
-const backendUrl =
-  import.meta.env.VITE_BACKEND_URL ||
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.MODE === "development" ? "http://localhost:5001" : "");
+const backendUrl = import.meta.env.DEV
+  ? (import.meta.env.VITE_IN_LOCALHOST || "http://localhost:5001")
+  : (import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || "");
 
 axios.defaults.baseURL = backendUrl
   ? `${backendUrl.replace(/\/$/, "")}/api/v1`
